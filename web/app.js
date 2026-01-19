@@ -26,10 +26,17 @@ class StashApp {
 
     // Load theme preference
     this.loadTheme();
+    
+   // Check if you're logged in
+   const { data: { session } } = await this.supabase.auth.getSession();
 
-    // Skip auth - go straight to main screen
-    this.showMainScreen();
-    this.loadData();
+   if (!session) {
+     this.showAuthScreen();
+     return;
+ }
+
+this.showMainScreen();
+this.loadData();
 
     this.bindEvents();
   }
