@@ -23,7 +23,10 @@ class StashApp {
       CONFIG.SUPABASE_URL,
       CONFIG.SUPABASE_ANON_KEY
     );
-
+ 
+    // Bind events FIRST so buttons/forms work
+  this.bindEvents();
+    
     // Load theme preference
     this.loadTheme();
     
@@ -38,7 +41,6 @@ class StashApp {
 this.showMainScreen();
 this.loadData();
 
-    this.bindEvents();
   }
 
   // Theme Management
