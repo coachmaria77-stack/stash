@@ -79,7 +79,9 @@ class StashApp {
     document.getElementById('signout-btn').addEventListener('click', () => {
       this.signOut();
     });
-
+document.getElementById('quick-save-btn')?.addEventListener('click', () => {
+  this.quickSaveUrl();
+});
     // Navigation
     document.querySelectorAll('.nav-item[data-view]').forEach(item => {
       item.addEventListener('click', (e) => {
@@ -921,7 +923,38 @@ class StashApp {
     this.closeReadingPane();
     this.loadSaves();
   }
+async quickSaveUrl() {
+  const input = document.getElementById('quick-save-url');
+  if (!input) {
+    alert('Quick save input not found');
+    return;
+  }
 
+  const url = input.value.trim();
+  if (!url) {
+    alert('Paste a link first');
+    return;
+  }
+
+  const { error } = await this.supabase
+    .from('saves')
+    .insert({
+      user_id: this.user.id,
+      url,
+      title: url,
+      source: 'manual',
+    });
+
+  if (error) {
+    console.error(error);
+    alert('Failed to save link');
+    return;
+  }
+
+  input.value = '';
+  this.loadSaves();
+  alert('Saved!');
+}
   async addTagToSave() {
     if (!this.currentSave) return;
 
